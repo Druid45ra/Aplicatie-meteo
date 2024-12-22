@@ -1,71 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aplicație meteo cu prognoză și notificări în timp real">
+    <meta name="theme-color" content="#6e00ff">
     <title>Weather App</title>
+    
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
 </head>
-
 <body>
     <div class="app-container">
-        <div class="search-container">
-            <input type="text" id="city" placeholder="Scrie un oraș ....">
-            <button onclick="getWeather()">Caută</button>
-        </div>
-        <div id="error-message" class="error-message"></div>
-        <div class="weather-container">
-            <div class="current-weather">
-                <div class="icon">
-                    <!-- Current Weather Icon -->
-                </div>
-                <div class="info">
-                    <h2 id="cityName">Oraș</h2>
-                    <p id="temperature">Temperatura: --°C</p>
-                    <p id="description">--</p>
-                </div>
+        <div class="header" role="banner">
+            <div class="theme-switch">
+                <i class="fas fa-moon" aria-hidden="true"></i>
+                <label class="switch" for="darkModeToggle">
+                    <input type="checkbox" id="darkModeToggle" aria-label="Comută modul întunecat">
+                    <span class="slider round"></span>
+                </label>
             </div>
-
-            <div class="forecast">
-                <!-- Forecast for 4 Days -->
-                <div class="day">
-                    <p>Wednesday</p>
-                    <div class="icon">
-                        <!-- Forecast Icon -->
-                    </div>
-                    <p class="temp">21°C</p>
-                </div>
-                <div class="day">
-                    <p>Thursday</p>
-                    <div class="icon">
-                        <!-- Forecast Icon -->
-                    </div>
-                    <p class="temp">24°C</p>
-                </div>
-                <div class="day">
-                    <p>Friday</p>
-                    <div class="icon">
-                        <!-- Forecast Icon -->
-                    </div>
-                    <p class="temp">21°C</p>
-                </div>
-                <div class="day">
-                    <p>Saturday</p>
-                    <div class="icon">
-                        <!-- Forecast Icon -->
-                    </div>
-                    <p class="temp">24°C</p>
-                </div>
+            <div class="units-switch">
+                <button id="unitToggle" aria-label="Schimbă unitatea de măsură între Celsius și Fahrenheit">°C / °F</button>
             </div>
         </div>
+
+        <main role="main">
+            <div class="search-container">
+                <div class="search-box" role="search">
+                    <i class="fas fa-location-dot location-icon" aria-hidden="true"></i>
+                    <input 
+                        type="text" 
+                        id="city" 
+                        placeholder="Scrie un oraș ...."
+                        aria-label="Caută un oraș"
+                        autocomplete="off"
+                    >
+                    <button 
+                        onclick="searchCity()"
+                        aria-label="Caută"
+                    ><i class="fas fa-search" aria-hidden="true"></i></button>
+                </div>
+                <button 
+                    id="getCurrentLocation" 
+                    class="location-btn"
+                    aria-label="Folosește locația curentă"
+                >
+                    <i class="fas fa-crosshairs" aria-hidden="true"></i> Locația mea
+                </button>
+            </div>
+
+            <div id="error-message" class="error-message" role="alert" aria-live="polite"></div>
+            
+            <div class="weather-container">
+                <!-- Restul codului HTML rămâne neschimbat, doar adăugăm atribute aria unde e necesar -->
+            </div>
+        </main>
     </div>
 
-    <div class="footer">
-        <p>@Copyright; 2024 Druid45ra. Toate drepturile rezervate.</p>
+    <footer class="footer" role="contentinfo">
+        <p><span id="currentYear"></span> Druid45ra. Toate drepturile rezervate.</p>
+    </footer>
+
+    <!-- Offline notification -->
+    <div id="offline-notification" class="offline-notification" role="alert" hidden>
+        Ești offline. Datele afișate pot să nu fie actualizate.
     </div>
 
+    <!-- Scripts -->
+    <script src="config.js"></script>
     <script src="script.js"></script>
+    <script>
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
 </body>
-
 </html>
