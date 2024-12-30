@@ -1,0 +1,6 @@
+{
+    "type": "node",
+    "request": "launch",
+    "name": "Debug Program",
+    "program": "${workspaceFolder}/script.js"
+}

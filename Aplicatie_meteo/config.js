@@ -1,3 +1,4 @@
+// config.js
 const config = {
     // În producție, acestea ar trebui să fie variabile de mediu
     // sau gestionate de un backend
@@ -18,3 +19,5 @@ const config = {
 
 // Prevenim modificarea obiectului de configurare
 Object.freeze(config);
+
+module.exports = config;
